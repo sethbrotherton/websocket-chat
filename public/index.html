@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <title>WebSocket Chat</title>
+  </head>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+  </script>
+  <body>
+    <header class="teal">
+      <div class="">
+        <div><p class="white-text center flow-text">Family Chat Site</p></div>
+      </div>
+    </header>
+
+    <main>
+      <div id="chat-room">
+        <div class="chat-window">
+          <div id="output"></div>
+          <div id="feedback"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="page-footer">
+      <div id="inputs" class="container">
+        <div class="row">
+          <form action="">
+            <input id="handle" type="text" placeholder="Handle" />
+            <input id="message" type="text" placeholder="message" />
+            <button type="submit" id="send" class="btn">Send</button>
+          </form>
+        </div>
+      </div>
+    </footer>
+
+    <script src="chat.js"></script>
+  </body>
+</html>
