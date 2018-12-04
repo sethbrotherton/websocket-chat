@@ -16,6 +16,8 @@ var io = socket(server);
 io.on("connection", function(socket) {
   console.log("Made a socket connection", socket.id);
 
+  io.emit("newConnection");
+
   socket.on("chatMessage", data => {
     io.sockets.emit("chatMessage", data);
   });

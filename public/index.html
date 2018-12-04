@@ -16,13 +16,18 @@
     <title>WebSocket Chat</title>
   </head>
   <script src="/socket.io/socket.io.js"></script>
+
   <script>
     var socket = io();
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
   <body>
     <header class="teal">
       <div class="">
-        <div><p class="white-text center flow-text">Family Chat Site</p></div>
+        <div>
+          <p class="white-text center flow-text">Family Chat Site</p>
+          <p class="white-text center flow-text" id="users"></p>
+        </div>
       </div>
     </header>
 
@@ -35,7 +40,7 @@
       </div>
     </main>
 
-    <footer class="page-footer">
+    <footer class="page-footer section">
       <div id="inputs" class="container">
         <div class="row">
           <form action="">
