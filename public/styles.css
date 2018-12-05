@@ -6,9 +6,16 @@ body {
 
 main {
   flex: 1 0 auto;
+  padding: 0 1rem;
 }
 
 .card {
   width: 40%;
   border-radius: 13px;
+}
+
+@media (max-width: 700px) {
+  .card {
+    width: 80%;
+  }
 }

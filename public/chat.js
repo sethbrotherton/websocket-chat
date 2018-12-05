@@ -7,6 +7,10 @@ const feedback = document.querySelector("#feedback");
 const users = document.querySelector("#users");
 let numUsers = 0;
 
+function scrollToBottom() {
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
 // emit events
 
 btn.addEventListener("click", function(e) {
@@ -17,6 +21,7 @@ btn.addEventListener("click", function(e) {
     time: moment().format("h:mm a")
   });
   message.value = "";
+  scrollToBottom();
 });
 
 message.addEventListener("keypress", function() {
@@ -30,6 +35,7 @@ socket.on("chatMessage", function(data) {
     data.handle
   }:</strong> ${data.message}</p>
   <p>Sent at ${data.time}</p></div></div>`;
+  scrollToBottom();
 });
 
 socket.on("typing", function(data) {
