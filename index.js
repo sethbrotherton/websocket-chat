@@ -25,4 +25,8 @@ io.on("connection", function(socket) {
   socket.on("typing", data => {
     socket.broadcast.emit("typing", data);
   });
+
+  socket.on("blurred", () => {
+    socket.broadcast.emit("blurred");
+  });
 });
