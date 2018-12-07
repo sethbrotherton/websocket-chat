@@ -6,7 +6,6 @@ const output = document.querySelector("#output");
 const feedback = document.querySelector("#feedback");
 const users = document.querySelector("#users");
 const cards = document.querySelectorAll(".card");
-let numUsers = 0;
 
 function scrollToBottom() {
   window.scrollTo(0, document.body.scrollHeight);
@@ -57,12 +56,10 @@ socket.on("blurred", function() {
   feedback.innerHTML = ``;
 });
 
-socket.on("newConnection", function() {
-  numUsers += 1;
-  users.textContent = `${numUsers} users are now online.`;
+socket.on("newConnection", function(serverNumOfUsers) {
+  users.textContent = `${serverNumOfUsers} users are now online.`;
 });
 
-socket.on("disconnect", function() {
-  numUsers -= 1;
-  users.textContent = `${numUsers} users are now online.`;
+socket.on("disconnection", function(serverNumOfUsers) {
+  users.textContent = `${serverNumOfUsers} users are now online.`;
 });

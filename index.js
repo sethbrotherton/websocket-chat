@@ -1,6 +1,7 @@
 const express = require("express");
 const socket = require("socket.io");
 const port = process.env.PORT || 4000;
+let serverNumOfUsers = 0;
 
 // App setup
 var app = express();
@@ -14,9 +15,10 @@ app.use(express.static("public"));
 var io = socket(server);
 
 io.on("connection", function(socket) {
-  console.log("Made a socket connection", socket.id);
+  serverNumOfUsers++;
+  console.log("Made a socket connection", socket.id, serverNumOfUsers);
 
-  io.emit("newConnection");
+  io.sockets.emit("newConnection", serverNumOfUsers);
 
   socket.on("chatMessage", data => {
     io.sockets.emit("chatMessage", data);
@@ -28,5 +30,11 @@ io.on("connection", function(socket) {
 
   socket.on("blurred", () => {
     socket.broadcast.emit("blurred");
+  });
+
+  socket.on("disconnect", function() {
+    serverNumOfUsers--;
+    io.sockets.emit("disconnection", serverNumOfUsers);
+    console.log("Someone disconnected", serverNumOfUsers);
   });
 });
