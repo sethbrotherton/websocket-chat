@@ -6,10 +6,93 @@ const output = document.querySelector("#output");
 const feedback = document.querySelector("#feedback");
 const users = document.querySelector("#users");
 const cards = document.querySelectorAll(".card");
+const signUpBtn = document.querySelector("#sign-up-btn");
+const signInBtn = document.querySelector("#sign-in-btn");
+const signOutBtn = document.querySelector("#sign-out-btn");
+let signedIn = false;
+
+// AUTHENTICATION VIA FIREBASE
+// SIGN - UP ABILITY
+function signUp(e) {
+  e.preventDefault();
+  // variables for firebase sign-up
+  let email = document.querySelector("#new-email").value;
+  let password = document.querySelector("#new-password").value;
+  console.log(email, password);
+
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorMessage);
+    });
+}
+// Attach sign up event to sign up button
+signUpBtn.addEventListener("click", signUp);
+
+// SIGN - IN
+function signIn(e) {
+  e.preventDefault();
+
+  // variables for firebase sign-up
+  let email = document.querySelector("#user-email").value;
+  let password = document.querySelector("#user-password").value;
+  console.log(email, password);
+
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorMessage);
+    });
+  signedIn = !signedIn;
+  console.log(signedIn);
+}
+
+// Attach sign in event to sign in button
+signInBtn.addEventListener("click", signIn);
 
 function scrollToBottom() {
   window.scrollTo(0, document.body.scrollHeight);
 }
+
+// SIGN - OUT
+function signOutUser(e) {
+  e.preventDefault();
+
+  firebase
+    .auth()
+    .signOut()
+    .then(function() {
+      // Sign-out successful.
+      console.log("you signed out!");
+    })
+    .catch(function(error) {
+      // An error happened.
+    });
+  signedIn = !signedIn;
+
+  console.log(signedIn);
+}
+
+// Attach sign out event to sign out button
+signOutBtn.addEventListener("click", signOutUser);
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    console.log(user);
+  } else {
+    // No user is signed in.
+    console.log("elsed out");
+  }
+});
 
 // emit events
 

@@ -14,6 +14,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link rel="stylesheet" href="styles.css" />
     <title>WebSocket Chat</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-auth.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyB4KgVepFyhWzvs-VDL50WcnngttsuBJXA",
+        authDomain: "websocket-chat-app.firebaseapp.com",
+        databaseURL: "https://websocket-chat-app.firebaseio.com",
+        projectId: "websocket-chat-app",
+        storageBucket: "",
+        messagingSenderId: "23088137224"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css"
+    />
   </head>
   <script src="/socket.io/socket.io.js"></script>
 
@@ -30,6 +50,29 @@
         </div>
       </div>
     </header>
+    <div class="container sign-up">
+      <form action="">
+        <label for="userName">Username:</label>
+        <input type="text" id="new-username" placeholder="Enter Username" />
+        <label for="email">Email:</label>
+        <input type="text" id="new-email" placeholder="Enter email" />
+        <label for="">Password:</label>
+        <input type="text" id="new-password" placeholder="Enter password" />
+        <button class="btn" id="sign-up-btn">Sign Up</button>
+      </form>
+    </div>
+
+    <div class="container sign-in">
+      <form action="">
+        <label for="user-email">E-mail:</label>
+        <input type="text" placeholder="enter e-mail" id="user-email" />
+        <label for="user-password">Password:</label>
+        <input type="text" placeholder="enter password" id="user-password" />
+        <p id="error"></p>
+        <button id="sign-in-btn">Sign In</button>
+      </form>
+    </div>
+    <button id="sign-out-btn">Sign Out</button>
 
     <main>
       <div id="chat-room">
