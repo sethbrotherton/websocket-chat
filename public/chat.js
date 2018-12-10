@@ -11,12 +11,15 @@ const signInBtn = document.querySelector("#sign-in-btn");
 const signOutBtn = document.querySelector("#sign-out-btn");
 const signInDiv = document.querySelector("#sign-in-div");
 const signUpDiv = document.querySelector("#sign-up-div");
+const signInError = document.querySelector("#sign-in-error");
+const signUpError = document.querySelector("#sign-up-error");
 let signedIn = false;
 
 // AUTHENTICATION VIA FIREBASE
 // SIGN - UP ABILITY
 function signUp(e) {
   e.preventDefault();
+  signUpError.innerHTML = "";
   // variables for firebase sign-up
   let email = document.querySelector("#new-email").value;
   let password = document.querySelector("#new-password").value;
@@ -30,6 +33,7 @@ function signUp(e) {
       var errorCode = error.code;
       var errorMessage = error.message;
       console.log(errorMessage);
+      signUpError.innerHTML = `${errorMessage}`;
     });
   signedIn = true;
 }
@@ -39,7 +43,7 @@ signUpBtn.addEventListener("click", signUp);
 // SIGN - IN
 function signIn(e) {
   e.preventDefault();
-
+  signInError.innerHTML = "";
   // variables for firebase sign-up
   let email = document.querySelector("#user-email").value;
   let password = document.querySelector("#user-password").value;
@@ -53,6 +57,7 @@ function signIn(e) {
       var errorCode = error.code;
       var errorMessage = error.message;
       console.log(errorMessage);
+      signInError.innerHTML = `${errorMessage}`;
     });
   signedIn = true;
 }
@@ -89,12 +94,14 @@ firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // User is signed in.
     console.log(user);
+    handle.value = user.email || user.display;
     signOutBtn.style.display = "inline";
     signInDiv.style.display = "none";
     signUpDiv.style.display = "none";
   } else {
     // No user is signed in.
     console.log(user);
+    handle.value = "";
     signOutBtn.style.display = "none";
     signInDiv.style.display = "inline";
     signUpDiv.style.display = "inline";

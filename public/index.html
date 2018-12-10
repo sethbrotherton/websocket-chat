@@ -61,7 +61,12 @@
             <label for="email">Email:</label>
             <input type="text" id="new-email" placeholder="Enter email" />
             <label for="">Password:</label>
-            <input type="text" id="new-password" placeholder="Enter password" />
+            <input
+              type="password"
+              id="new-password"
+              placeholder="Enter password"
+            />
+            <p class="red-text" id="sign-up-error"></p>
             <button class="btn" id="sign-up-btn">Sign Up</button>
           </form>
         </div>
@@ -73,11 +78,11 @@
             <input type="text" placeholder="enter e-mail" id="user-email" />
             <label for="user-password">Password:</label>
             <input
-              type="text"
+              type="password"
               placeholder="enter password"
               id="user-password"
             />
-            <p id="error"></p>
+            <p class="red-text" id="sign-in-error"></p>
             <button class="btn" id="sign-in-btn">Sign In</button>
           </form>
         </div>
@@ -95,8 +100,9 @@
       <div id="inputs" class="container">
         <div class="row">
           <form action="">
-            <input id="handle" type="text" placeholder="Handle" />
+            <input id="handle" type="text" placeholder="handle" />
             <input id="message" type="text" placeholder="message" />
+            <p id="send-error"></p>
             <button type="submit" id="send" class="btn">Send</button>
           </form>
         </div>
