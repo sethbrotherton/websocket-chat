@@ -14,6 +14,37 @@ main {
   border-radius: 13px;
 }
 
+#sign-out-btn {
+  margin: 0 1rem 1rem 0;
+}
+
+#sign-up-div,
+#sign-in-div {
+  margin-top: 2rem;
+}
+
+#sign-up-div ::placeholder,
+#sign-in-div ::placeholder {
+  color: black;
+  opacity: 0.3;
+}
+
+#sign-up-div label,
+#sign-in-div label {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+form {
+  padding: 1rem;
+}
+
+legend {
+  font-size: 1.7rem;
+  font-weight: 700;
+  opacity: 0.5;
+}
+
 @media (max-width: 700px) {
   .card {
     width: 80%;

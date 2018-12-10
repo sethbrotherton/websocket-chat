@@ -9,6 +9,8 @@ const cards = document.querySelectorAll(".card");
 const signUpBtn = document.querySelector("#sign-up-btn");
 const signInBtn = document.querySelector("#sign-in-btn");
 const signOutBtn = document.querySelector("#sign-out-btn");
+const signInDiv = document.querySelector("#sign-in-div");
+const signUpDiv = document.querySelector("#sign-up-div");
 let signedIn = false;
 
 // AUTHENTICATION VIA FIREBASE
@@ -29,6 +31,7 @@ function signUp(e) {
       var errorMessage = error.message;
       console.log(errorMessage);
     });
+  signedIn = true;
 }
 // Attach sign up event to sign up button
 signUpBtn.addEventListener("click", signUp);
@@ -51,8 +54,7 @@ function signIn(e) {
       var errorMessage = error.message;
       console.log(errorMessage);
     });
-  signedIn = !signedIn;
-  console.log(signedIn);
+  signedIn = true;
 }
 
 // Attach sign in event to sign in button
@@ -72,13 +74,12 @@ function signOutUser(e) {
     .then(function() {
       // Sign-out successful.
       console.log("you signed out!");
+      signedIn = false;
     })
     .catch(function(error) {
       // An error happened.
     });
-  signedIn = !signedIn;
-
-  console.log(signedIn);
+  output.innerHTML = "";
 }
 
 // Attach sign out event to sign out button
@@ -88,9 +89,15 @@ firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // User is signed in.
     console.log(user);
+    signOutBtn.style.display = "inline";
+    signInDiv.style.display = "none";
+    signUpDiv.style.display = "none";
   } else {
     // No user is signed in.
-    console.log("elsed out");
+    console.log(user);
+    signOutBtn.style.display = "none";
+    signInDiv.style.display = "inline";
+    signUpDiv.style.display = "inline";
   }
 });
 
@@ -98,13 +105,15 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 btn.addEventListener("click", function(e) {
   e.preventDefault();
-  socket.emit("chatMessage", {
-    message: message.value,
-    handle: handle.value.toUpperCase(),
-    time: moment().format("h:mm a")
-  });
-  message.value = "";
-  scrollToBottom();
+  if (signedIn) {
+    socket.emit("chatMessage", {
+      message: message.value,
+      handle: handle.value.toUpperCase(),
+      time: moment().format("h:mm a")
+    });
+    message.value = "";
+    scrollToBottom();
+  }
 });
 
 message.addEventListener("keypress", function() {

@@ -47,32 +47,42 @@
         <div>
           <h3 class="white-text center">Brotherton's Private Chat Site</h3>
           <p class="white-text center flow-text" id="users"></p>
+          <button class="btn red right" id="sign-out-btn">Sign Out</button>
         </div>
       </div>
     </header>
-    <div class="container sign-up">
-      <form action="">
-        <label for="userName">Username:</label>
-        <input type="text" id="new-username" placeholder="Enter Username" />
-        <label for="email">Email:</label>
-        <input type="text" id="new-email" placeholder="Enter email" />
-        <label for="">Password:</label>
-        <input type="text" id="new-password" placeholder="Enter password" />
-        <button class="btn" id="sign-up-btn">Sign Up</button>
-      </form>
+    <div class="container">
+      <div class="row">
+        <div class="col m5 blue lighten-4 sign-up" id="sign-up-div">
+          <form action="">
+            <legend>Sign Up</legend>
+            <label for="userName">Username:</label>
+            <input type="text" id="new-username" placeholder="Enter Username" />
+            <label for="email">Email:</label>
+            <input type="text" id="new-email" placeholder="Enter email" />
+            <label for="">Password:</label>
+            <input type="text" id="new-password" placeholder="Enter password" />
+            <button class="btn" id="sign-up-btn">Sign Up</button>
+          </form>
+        </div>
+        <div class="col m2"></div>
+        <div class="col m5 blue lighten-4 sign-in" id="sign-in-div">
+          <form action="">
+            <legend>Sign In</legend>
+            <label for="user-email">E-mail:</label>
+            <input type="text" placeholder="enter e-mail" id="user-email" />
+            <label for="user-password">Password:</label>
+            <input
+              type="text"
+              placeholder="enter password"
+              id="user-password"
+            />
+            <p id="error"></p>
+            <button class="btn" id="sign-in-btn">Sign In</button>
+          </form>
+        </div>
+      </div>
     </div>
-
-    <div class="container sign-in">
-      <form action="">
-        <label for="user-email">E-mail:</label>
-        <input type="text" placeholder="enter e-mail" id="user-email" />
-        <label for="user-password">Password:</label>
-        <input type="text" placeholder="enter password" id="user-password" />
-        <p id="error"></p>
-        <button id="sign-in-btn">Sign In</button>
-      </form>
-    </div>
-    <button id="sign-out-btn">Sign Out</button>
 
     <main>
       <div id="chat-room">
