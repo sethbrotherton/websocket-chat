@@ -13,6 +13,8 @@ const signInDiv = document.querySelector("#sign-in-div");
 const signUpDiv = document.querySelector("#sign-up-div");
 const signInError = document.querySelector("#sign-in-error");
 const signUpError = document.querySelector("#sign-up-error");
+const newUsernameInput = document.querySelector("#new-username");
+let username = null;
 let signedIn = false;
 
 // AUTHENTICATION VIA FIREBASE
@@ -24,7 +26,7 @@ function signUp(e) {
   let email = document.querySelector("#new-email").value;
   let password = document.querySelector("#new-password").value;
   console.log(email, password);
-
+  username = newUsernameInput.value;
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
@@ -35,7 +37,7 @@ function signUp(e) {
       console.log(errorMessage);
       signUpError.innerHTML = `${errorMessage}`;
     });
-  signedIn = true;
+  //signedIn = true;
 }
 // Attach sign up event to sign up button
 signUpBtn.addEventListener("click", signUp);
@@ -59,7 +61,7 @@ function signIn(e) {
       console.log(errorMessage);
       signInError.innerHTML = `${errorMessage}`;
     });
-  signedIn = true;
+  //signedIn = true;
 }
 
 // Attach sign in event to sign in button
@@ -79,7 +81,7 @@ function signOutUser(e) {
     .then(function() {
       // Sign-out successful.
       console.log("you signed out!");
-      signedIn = false;
+      // signedIn = false;
     })
     .catch(function(error) {
       // An error happened.
@@ -94,14 +96,35 @@ firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // User is signed in.
     console.log(user);
-    handle.value = user.email || user.display;
+    signedIn = true;
+    username = user.displayName;
+    if (!user.displayName) {
+      var user = firebase.auth().currentUser;
+
+      user
+        .updateProfile({
+          displayName: username
+        })
+        .then(function() {
+          console.log(user.displayName);
+          handle.value = user.displayName || user.email;
+          // handle.style.pointerEvents = "none";
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      //handle.value = user.displayName || user.email;
+      //handle.style.pointerEvents = "none";
+    }
+
     signOutBtn.style.display = "inline";
     signInDiv.style.display = "none";
     signUpDiv.style.display = "none";
   } else {
     // No user is signed in.
     console.log(user);
-    handle.value = "";
+    signedIn = false;
+    //handle.value = "";
     signOutBtn.style.display = "none";
     signInDiv.style.display = "inline";
     signUpDiv.style.display = "inline";
@@ -115,7 +138,7 @@ btn.addEventListener("click", function(e) {
   if (signedIn) {
     socket.emit("chatMessage", {
       message: message.value,
-      handle: handle.value.toUpperCase(),
+      handle: username.toUpperCase(), //handle.value.toUpperCase(),
       time: moment().format("h:mm a")
     });
     message.value = "";
@@ -124,7 +147,7 @@ btn.addEventListener("click", function(e) {
 });
 
 message.addEventListener("keypress", function() {
-  socket.emit("typing", handle.value);
+  socket.emit("typing", username /*handle.value*/);
 });
 
 message.addEventListener("blur", function(e) {
@@ -136,8 +159,9 @@ let perspective = "";
 socket.on("chatMessage", function(data) {
   feedback.innerHTML = "";
 
-  data.handle.toUpperCase() === handle.value.toUpperCase()
-    ? (perspective = "blue left lighten-2")
+  data.handle === username.toUpperCase()
+    ? //data.handle.toUpperCase() === handle.value.toUpperCase()
+      (perspective = "blue left lighten-2")
     : (perspective = "green right lighten-2");
 
   output.innerHTML += `<div class="card ${perspective}"><div class="card-content"><p><strong>${
