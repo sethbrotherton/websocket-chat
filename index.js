@@ -2,6 +2,7 @@ const express = require("express");
 const socket = require("socket.io");
 const port = process.env.PORT || 4000;
 let serverNumOfUsers = 0;
+let currentUsers = [];
 
 // App setup
 var app = express();
@@ -19,6 +20,24 @@ io.on("connection", function(socket) {
   console.log("Made a socket connection", socket.id, serverNumOfUsers);
 
   io.sockets.emit("newConnection", serverNumOfUsers);
+
+  socket.on("userSignedIn", data => {
+    currentUsers.push(data);
+    console.log(currentUsers);
+    io.sockets.emit("addUser", currentUsers);
+  });
+
+  socket.on("userSignedOut", data => {
+    console.log(data);
+    let spot = currentUsers.indexOf(data);
+    currentUsers.splice(spot, 1);
+    //currentUsers.filter(user => user !== data);
+    // console.log("User: ", user, "Username: ", data);
+    //return user != data;
+
+    console.log(currentUsers);
+    io.sockets.emit("removeUser", currentUsers);
+  });
 
   socket.on("chatMessage", data => {
     io.sockets.emit("chatMessage", data);

@@ -1,6 +1,6 @@
 // DOM elements selected
 const message = document.querySelector("#message");
-const handle = document.querySelector("#handle");
+//const handle = document.querySelector("#handle");
 const btn = document.querySelector("#send");
 const output = document.querySelector("#output");
 const feedback = document.querySelector("#feedback");
@@ -16,6 +16,8 @@ const signUpError = document.querySelector("#sign-up-error");
 const newUsernameInput = document.querySelector("#new-username");
 let username = null;
 let signedIn = false;
+let usersBrowser = null;
+const currentUsersDiv = document.querySelector("#current-users");
 
 // AUTHENTICATION VIA FIREBASE
 // SIGN - UP ABILITY
@@ -82,6 +84,7 @@ function signOutUser(e) {
       // Sign-out successful.
       console.log("you signed out!");
       // signedIn = false;
+      socket.emit("userSignedOut", username);
     })
     .catch(function(error) {
       // An error happened.
@@ -97,7 +100,14 @@ firebase.auth().onAuthStateChanged(function(user) {
     // User is signed in.
     console.log(user);
     signedIn = true;
-    username = user.displayName;
+
+    if (user.displayName) {
+      username = user.displayName;
+      socket.emit("userSignedIn", user.displayName);
+    }
+
+    //socket.emit("userSignedIn", user.displayName);
+
     if (!user.displayName) {
       var user = firebase.auth().currentUser;
 
@@ -107,7 +117,8 @@ firebase.auth().onAuthStateChanged(function(user) {
         })
         .then(function() {
           console.log(user.displayName);
-          handle.value = user.displayName || user.email;
+          socket.emit("userSignedIn", user.displayName);
+          // handle.value = user.displayName || user.email;
           // handle.style.pointerEvents = "none";
         })
         .catch(function(error) {
@@ -117,6 +128,8 @@ firebase.auth().onAuthStateChanged(function(user) {
       //handle.style.pointerEvents = "none";
     }
 
+    //socket.emit("userSignedIn", user.displayName);
+
     signOutBtn.style.display = "inline";
     signInDiv.style.display = "none";
     signUpDiv.style.display = "none";
@@ -124,6 +137,9 @@ firebase.auth().onAuthStateChanged(function(user) {
     // No user is signed in.
     console.log(user);
     signedIn = false;
+
+    // socket.emit("userSignedOut", username);
+
     //handle.value = "";
     signOutBtn.style.display = "none";
     signInDiv.style.display = "inline";
@@ -186,3 +202,45 @@ socket.on("newConnection", function(serverNumOfUsers) {
 socket.on("disconnection", function(serverNumOfUsers) {
   users.textContent = `${serverNumOfUsers} users are now online.`;
 });
+
+socket.on("addUser", function(currentUsers) {
+  console.log(currentUsers);
+  if (currentUsers.length === 1) {
+    currentUsersDiv.innerHTML = `${currentUsers} is online`;
+  } else if (currentUsers.length === 2) {
+    let formattedUsers = currentUsers.join(" and ");
+    currentUsersDiv.innerHTML = `${formattedUsers} are online`;
+  } else if (currentUsers.length > 2) {
+    let allButLast = currentUsers.slice(0, -1).join(", ");
+    console.log("All but last: ", allButLast);
+    let lastUser = currentUsers[currentUsers.length - 1];
+    console.log("Last user: ", lastUser);
+    currentUsersDiv.innerHTML = `${allButLast} and ${lastUser} are online`;
+  }
+});
+
+socket.on("removeUser", function(currentUsers) {
+  if (signedIn) {
+    if (currentUsers.length === 1) {
+      currentUsersDiv.innerHTML = `${currentUsers} is online`;
+    } else if (currentUsers.length === 2) {
+      let formattedUsers = currentUsers.join(" and ");
+      currentUsersDiv.innerHTML = `${formattedUsers} are online`;
+    } else if (currentUsers.length > 2) {
+      let allButLast = currentUsers.slice(0, -1).join(", ");
+      console.log("All but last: ", allButLast);
+      let lastUser = currentUsers[currentUsers.length - 1];
+      console.log("Last user: ", lastUser);
+      currentUsersDiv.innerHTML = `${allButLast} and ${lastUser} are online`;
+    }
+  } else {
+    currentUsersDiv.innerHTML = ``;
+  }
+});
+
+// REFACTOR THIS IN LATER
+// function formatArrayOfUsers(arr) {
+//   if (arr.length === 1) {
+
+//   }
+// }
