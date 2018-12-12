@@ -1,6 +1,5 @@
 // DOM elements selected
 const message = document.querySelector("#message");
-//const handle = document.querySelector("#handle");
 const btn = document.querySelector("#send");
 const output = document.querySelector("#output");
 const feedback = document.querySelector("#feedback");
@@ -27,19 +26,15 @@ function signUp(e) {
   // variables for firebase sign-up
   let email = document.querySelector("#new-email").value;
   let password = document.querySelector("#new-password").value;
-  console.log(email, password);
   username = newUsernameInput.value;
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .catch(function(error) {
       // Handle Errors here.
-      var errorCode = error.code;
       var errorMessage = error.message;
-      console.log(errorMessage);
       signUpError.innerHTML = `${errorMessage}`;
     });
-  //signedIn = true;
 }
 // Attach sign up event to sign up button
 signUpBtn.addEventListener("click", signUp);
@@ -51,19 +46,15 @@ function signIn(e) {
   // variables for firebase sign-up
   let email = document.querySelector("#user-email").value;
   let password = document.querySelector("#user-password").value;
-  console.log(email, password);
 
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
     .catch(function(error) {
       // Handle Errors here.
-      var errorCode = error.code;
       var errorMessage = error.message;
-      console.log(errorMessage);
       signInError.innerHTML = `${errorMessage}`;
     });
-  //signedIn = true;
 }
 
 // Attach sign in event to sign in button
@@ -82,8 +73,6 @@ function signOutUser(e) {
     .signOut()
     .then(function() {
       // Sign-out successful.
-      console.log("you signed out!");
-      // signedIn = false;
       socket.emit("userSignedOut", username);
     })
     .catch(function(error) {
@@ -98,7 +87,6 @@ signOutBtn.addEventListener("click", signOutUser);
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // User is signed in.
-    console.log(user);
     signedIn = true;
 
     if (user.displayName) {
@@ -116,16 +104,11 @@ firebase.auth().onAuthStateChanged(function(user) {
           displayName: username
         })
         .then(function() {
-          console.log(user.displayName);
           socket.emit("userSignedIn", user.displayName);
-          // handle.value = user.displayName || user.email;
-          // handle.style.pointerEvents = "none";
         })
         .catch(function(error) {
           console.log(error);
         });
-      //handle.value = user.displayName || user.email;
-      //handle.style.pointerEvents = "none";
     }
 
     //socket.emit("userSignedIn", user.displayName);
@@ -135,12 +118,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     signUpDiv.style.display = "none";
   } else {
     // No user is signed in.
-    console.log(user);
     signedIn = false;
-
-    // socket.emit("userSignedOut", username);
-
-    //handle.value = "";
     signOutBtn.style.display = "none";
     signInDiv.style.display = "inline";
     signUpDiv.style.display = "inline";
@@ -176,8 +154,7 @@ socket.on("chatMessage", function(data) {
   feedback.innerHTML = "";
 
   data.handle === username.toUpperCase()
-    ? //data.handle.toUpperCase() === handle.value.toUpperCase()
-      (perspective = "blue left lighten-2")
+    ? (perspective = "blue left lighten-2")
     : (perspective = "green right lighten-2");
 
   output.innerHTML += `<div class="card ${perspective}"><div class="card-content"><p><strong>${
@@ -204,7 +181,6 @@ socket.on("disconnection", function(serverNumOfUsers) {
 });
 
 socket.on("addUser", function(currentUsers) {
-  console.log(currentUsers);
   if (currentUsers.length === 1) {
     currentUsersDiv.innerHTML = `${currentUsers} is online`;
   } else if (currentUsers.length === 2) {
@@ -212,9 +188,7 @@ socket.on("addUser", function(currentUsers) {
     currentUsersDiv.innerHTML = `${formattedUsers} are online`;
   } else if (currentUsers.length > 2) {
     let allButLast = currentUsers.slice(0, -1).join(", ");
-    console.log("All but last: ", allButLast);
     let lastUser = currentUsers[currentUsers.length - 1];
-    console.log("Last user: ", lastUser);
     currentUsersDiv.innerHTML = `${allButLast} and ${lastUser} are online`;
   }
 });
@@ -228,9 +202,7 @@ socket.on("removeUser", function(currentUsers) {
       currentUsersDiv.innerHTML = `${formattedUsers} are online`;
     } else if (currentUsers.length > 2) {
       let allButLast = currentUsers.slice(0, -1).join(", ");
-      console.log("All but last: ", allButLast);
       let lastUser = currentUsers[currentUsers.length - 1];
-      console.log("Last user: ", lastUser);
       currentUsersDiv.innerHTML = `${allButLast} and ${lastUser} are online`;
     }
   } else {
