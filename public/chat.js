@@ -181,28 +181,33 @@ socket.on("disconnection", function(serverNumOfUsers) {
 });
 
 socket.on("addUser", function(currentUsers) {
-  if (currentUsers.length === 1) {
-    currentUsersDiv.innerHTML = `${currentUsers} is online`;
-  } else if (currentUsers.length === 2) {
-    let formattedUsers = currentUsers.join(" and ");
+  let noDuplicates = Array.from(new Set(currentUsers));
+  console.log(noDuplicates);
+  if (noDuplicates.length === 1) {
+    currentUsersDiv.innerHTML = `${noDuplicates} is online`;
+  } else if (noDuplicates.length === 2) {
+    let formattedUsers = noDuplicates.join(" and ");
     currentUsersDiv.innerHTML = `${formattedUsers} are online`;
-  } else if (currentUsers.length > 2) {
-    let allButLast = currentUsers.slice(0, -1).join(", ");
-    let lastUser = currentUsers[currentUsers.length - 1];
+  } else if (noDuplicates.length > 2) {
+    let allButLast = noDuplicates.slice(0, -1).join(", ");
+    let lastUser = noDuplicates[noDuplicates.length - 1];
     currentUsersDiv.innerHTML = `${allButLast} and ${lastUser} are online`;
   }
 });
 
 socket.on("removeUser", function(currentUsers) {
+  let noDuplicates = Array.from(new Set(currentUsers));
+  console.log(noDuplicates);
   if (signedIn) {
-    if (currentUsers.length === 1) {
-      currentUsersDiv.innerHTML = `${currentUsers} is online`;
-    } else if (currentUsers.length === 2) {
-      let formattedUsers = currentUsers.join(" and ");
+    console.log(currentUsers);
+    if (noDuplicates.length === 1) {
+      currentUsersDiv.innerHTML = `${noDuplicates} is online`;
+    } else if (noDuplicates.length === 2) {
+      let formattedUsers = noDuplicates.join(" and ");
       currentUsersDiv.innerHTML = `${formattedUsers} are online`;
-    } else if (currentUsers.length > 2) {
-      let allButLast = currentUsers.slice(0, -1).join(", ");
-      let lastUser = currentUsers[currentUsers.length - 1];
+    } else if (noDuplicates.length > 2) {
+      let allButLast = noDuplicates.slice(0, -1).join(", ");
+      let lastUser = noDuplicates[noDuplicates.length - 1];
       currentUsersDiv.innerHTML = `${allButLast} and ${lastUser} are online`;
     }
   } else {

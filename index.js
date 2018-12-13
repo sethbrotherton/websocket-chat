@@ -23,19 +23,13 @@ io.on("connection", function(socket) {
 
   socket.on("userSignedIn", data => {
     currentUsers.push(data);
-    console.log(currentUsers);
     io.sockets.emit("addUser", currentUsers);
   });
 
   socket.on("userSignedOut", data => {
-    console.log(data);
     let spot = currentUsers.indexOf(data);
     currentUsers.splice(spot, 1);
-    //currentUsers.filter(user => user !== data);
-    // console.log("User: ", user, "Username: ", data);
-    //return user != data;
 
-    console.log(currentUsers);
     io.sockets.emit("removeUser", currentUsers);
   });
 
@@ -54,6 +48,5 @@ io.on("connection", function(socket) {
   socket.on("disconnect", function() {
     serverNumOfUsers--;
     io.sockets.emit("disconnection", serverNumOfUsers);
-    console.log("Someone disconnected", serverNumOfUsers);
   });
 });
